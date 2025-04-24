@@ -22,16 +22,50 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.InputStream
+import android.speech.tts.TextToSpeech
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
     private val projectID = "gametriviaagent-vewc"
     private val sessionID = "unique-session-id"
+    private lateinit var tts: TextToSpeech
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        tts = TextToSpeech(this, object : TextToSpeech.OnInitListener {
+            override fun onInit(status: Int) {
+                if (status == TextToSpeech.SUCCESS) {
+                    val hindiLocale = Locale("hi", "IN")
+                    val result = tts.setLanguage(hindiLocale)
 
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+                        Toast.makeText(this@MainActivity, "Hindi TTS not supported", Toast.LENGTH_LONG).show()
+                    } else {
+                        // Look for a male Hindi voice
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            val maleVoice = tts.voices.find { voice ->
+                                voice.locale == hindiLocale && voice.name.contains("male", ignoreCase = true)
+                            }
+
+                            if (maleVoice != null) {
+                                tts.voice = maleVoice
+                                Log.d("TTS", "Using male Hindi voice: ${maleVoice.name}")
+                            } else {
+                                Log.w("TTS", "No male Hindi voice found. Using default.")
+                            }
+                        }
+
+                        tts.setPitch(1.0f) // Natural pitch
+                        tts.setSpeechRate(0.85f) // Slightly slower
+                    }
+                } else {
+                    Toast.makeText(this@MainActivity, "TTS init failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
         val userInput = findViewById<EditText>(R.id.userInput)
         val sendButton = findViewById<Button>(R.id.sendButton)
         val botReply = findViewById<TextView>(R.id.botReply)
@@ -103,7 +137,7 @@ class MainActivity : AppCompatActivity() {
             var botResponse = "Sending..."
 
             try {
-                val credentials: InputStream = resources.openRawResource(R.raw.dialogflow_key)
+                val credentials: InputStream = resources.openRawResource(R.raw.dialogflow_agent_newkey)
                 val googleCredentials = GoogleCredentials.fromStream(credentials)
 
                 val credentialsProvider = FixedCredentialsProvider.create(googleCredentials)
@@ -134,7 +168,10 @@ class MainActivity : AppCompatActivity() {
 
             withContext(Dispatchers.Main) {
                 botReply.text = botResponse
+                tts.speak(botResponse, TextToSpeech.QUEUE_FLUSH, null, null)
             }
         }
     }
 }
+
+
