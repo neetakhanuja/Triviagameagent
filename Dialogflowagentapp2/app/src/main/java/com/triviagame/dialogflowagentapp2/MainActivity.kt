@@ -1,14 +1,17 @@
 package com.triviagame.dialogflowagentapp2
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.dialogflow.v2.*
@@ -34,6 +37,8 @@ class MainActivity : AppCompatActivity() {
         val botReply = findViewById<TextView>(R.id.botReply)
         val connectivityStatus = findViewById<TextView>(R.id.connectivityStatus)
 
+        val micButton = findViewById<Button>(R.id.micButton)
+
         sendButton.setOnClickListener {
             val message = userInput.text.toString()
             botReply.text = "Sending..."
@@ -46,13 +51,35 @@ class MainActivity : AppCompatActivity() {
                 botReply.text = "Please check your internet connection."
             }
         }
+//Mic code begins here
+        micButton.setOnClickListener {
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en")
 
+            try {
+                startActivityForResult(intent, 100)
+            } catch (e: ActivityNotFoundException) {
+                Toast.makeText(this, "Speech recognition not supported", Toast.LENGTH_SHORT).show()
+            }
+        }
+        // Mic code ends here
         val googleLink = findViewById<TextView>(R.id.googleLink)
         googleLink.setOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com")))
         }
     }
 
+    //Mic function begins here
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+            val spokenText = result?.get(0) ?: ""
+            findViewById<EditText>(R.id.userInput).setText(spokenText)
+        }
+    }
+    //Mic functionality ends here
     // Safe internet connectivity check
     private fun isInternetAvailable(): Boolean {
         val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
