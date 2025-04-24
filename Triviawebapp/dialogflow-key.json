@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "gametriviaagent-vewc",
+  "private_key_id": "e25d2f1908dd45c568a99896abba2052ca2a45e8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCn3awHGMiRn/Ag\ngXpdQnES18OzZ4aV2h/uYr+0DLXQkBURy5LlDy7Cb9zRLUdvKaD1+SmnBYdRkvAL\nnTHH637wU/zyGtiEpg2kJaaKyXHr106rOpnG8k4EIwGROsyjMUORrmACpEcOKxNG\nAHFaONns5zXqivlHXowUn0AD8y2lT0zqrZh4MV1B5h0iWsRG94zJWnBFZBFiVJTY\nMR5jcSQ8629tQ33qVpLu95bgGsRn1RBnAWACe5AKBQMnLyt/PrW/fZbKcHyxnvGP\n0AjMnYJRTNZUvBOkBDu2w5/DWabDSmGN9GADtxOVjBqQW2txolTGDkaADXuspUzC\nQoxIhl+PAgMBAAECggEADDhQCnDh7O6dLuiYt/WbFfmSBrCIdMaHtjVcajwrTM79\npv7QUeTHN81SiwGw+7p75rFoOFSSiLwvGvwAVeLiqevF8/lDU3Njy9QX1G5HYO6a\nt06mnNEidRz37hK/NzliB1a6fjFnoMmUTMTB0QURdt76pvkjSMWXt0qZK5Bw0rdI\nan+FHoDroBqP71Yt5qLePY7VxfBljO9ICDt0wkdDverej5TlCNpJVNJffAQz/93V\nBsBbk9M7DESI1gknyOpCXPbRvblvYDztTkM8GIjKxqSS389hP5D21AXVHNVAVUlf\n1DAwF48/tQjv/bWYm28P6BxT63Fe0KCIRKkM6G5NxQKBgQDZgnmByMLXsxFuGemb\nKtTHAghGdi0hd+xmGu6US3oSBDahkoaYvMFnBiRzkTOw0cR8pmrXYiHy6sVUTUP0\n+NujAm1OybkE83/+W/PhkK/z2XbBJRm8HdZFciP3E87JUy8HOOI6V/FkZxV4K27J\n7yA+fURW5LBGMJYgfJz3ZV77fQKBgQDFkkIK7r9oBGNxRHsTJ70YOu9bziZyR/96\nHLPlNmpiVYrO0GJNkWzz79okVWvPpAZ1i+jf0CTflpd9tFSy91sEr4gZwUglXcAR\npOQsinbobDD4znYUJhK3tfq9DKz05NvJgJQs9t48rxhYLzKaiE/qRjyBjgp/PVSo\nlOJ2pG68+wKBgBdcky5kYMEII6Qetl+LHyVsy3S99qT0m3hwBhX5cVgECdYaxcgb\n5e3p0/pxqwqfzSnSOgF+McVEgANI9TaXkAeXGCRxOCUW/jVUrQIaJzvarI2cLYJt\n9fiphMFh6EDpZVCyRGId1fiBteWdTJ31yBHOJIvsrh4r08QTfkx4H9aFAoGAIywF\na9LS6l6VoW1yh5d0d2LOh8ZsW73rgj6n2+9TAwx9eJHqXiq8fbS+XeeDGOT3bWep\n3mY8mj1B3NQEnBOi9XOWRBd/k39cGQgEwtUnk/rmwPRoWu/oNyJDb/JYvAQeCIJG\nXrbYG2+EYvaMCKyppWg5j0rNHZe6gYR3yG0/dY8CgYArquRgcdy8136em/FI8iwn\nijP6CytGmPRmm+JoZGO+FBZez7lHiFIdBt8SuFH/Sz9MAaxu+1JyX5V/zRdR2gLS\nhEDxY1OCIxD+Ko/D4Bxzt3HcVUTmPwzgWa1eAZKNlHK2HMvZQNciVa5En/UtfIhm\ndHs7aGZUfWv1zank+awSYQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "gametriviaserviceaccount@gametriviaagent-vewc.iam.gserviceaccount.com",
+  "client_id": "108596024685727025406",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/gametriviaserviceaccount%40gametriviaagent-vewc.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

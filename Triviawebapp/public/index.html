@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Trivia Bot</title>
+</head>
+<body>
+  <h1>Ask the Trivia Bot</h1>
+  <input id="userInput" type="text" placeholder="Ask a question..." />
+  <button onclick="sendMessage()">Send</button>
+  <p id="response"></p>
+
+  <script>
+    async function sendMessage() {
+      const message = document.getElementById('userInput').value;
+      const res = await fetch('http://localhost:5000/message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      const data = await res.json();
+      document.getElementById('response').innerText = data.reply;
+    }
+  </script>
+</body>
+</html>
