@@ -1,5 +1,9 @@
 package com.triviagame.dialogflowagentapp2
 
+import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -7,24 +11,19 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.auth.oauth2.GoogleCredentials
-import com.google.cloud.dialogflow.v2.SessionsClient
-import com.google.cloud.dialogflow.v2.SessionName
-import com.google.cloud.dialogflow.v2.TextInput
-import com.google.cloud.dialogflow.v2.QueryInput
-import com.google.cloud.dialogflow.v2.DetectIntentResponse
-import com.google.cloud.dialogflow.v2.SessionsSettings
+import com.google.cloud.dialogflow.v2.*
 import com.google.api.gax.core.FixedCredentialsProvider
+import com.google.api.gax.grpc.InstantiatingGrpcChannelProvider
 import kotlinx.coroutines.CoroutineScope
-import java.io.InputStream
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-
+import java.io.InputStream
 
 class MainActivity : AppCompatActivity() {
 
-    private val projectID = "gametriviaagent-vewc"  // Your Dialogflow Project ID
-    private val sessionID = "unique-session-id"    // Unique session ID (you can change this)
+    private val projectID = "gametriviaagent-vewc"
+    private val sessionID = "unique-session-id"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,95 +32,82 @@ class MainActivity : AppCompatActivity() {
         val userInput = findViewById<EditText>(R.id.userInput)
         val sendButton = findViewById<Button>(R.id.sendButton)
         val botReply = findViewById<TextView>(R.id.botReply)
+        val connectivityStatus = findViewById<TextView>(R.id.connectivityStatus)
 
         sendButton.setOnClickListener {
             val message = userInput.text.toString()
             botReply.text = "Sending..."
 
-            // Call Dialogflow API
-            val response = sendToDialogflow(message)
-            botReply.text = response
+            if (isInternetAvailable()) {
+                connectivityStatus.text = "Internet: Connected"
+                sendToDialogflow(message, botReply)
+            } else {
+                connectivityStatus.text = "No Internet Connection"
+                botReply.text = "Please check your internet connection."
+            }
+        }
+
+        val googleLink = findViewById<TextView>(R.id.googleLink)
+        googleLink.setOnClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com")))
         }
     }
 
-    /*private fun sendToDialogflow(message: String): String {
-        return try {
-            // Load the service account key from res/raw
+    // Safe internet connectivity check
+    private fun isInternetAvailable(): Boolean {
+        val connectivityManager = getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
 
-
-            val credentials: InputStream = resources.openRawResource(R.raw.dialogflow_key)
-            val googleCredentials = GoogleCredentials.fromStream(credentials)
-            Log.d("Dialogflow", "Credentials loaded successfully!")
-
-            // Create credentials provider
-            val credentialsProvider = FixedCredentialsProvider.create(googleCredentials)
-
-            // Create a Dialogflow session with authenticated credentials
-            val sessionClient = SessionsClient.create(
-                SessionsSettings.newBuilder()
-                .setCredentialsProvider { credentialsProvider }
-                .build())
-
-            val session = SessionName.of(projectID, sessionID)
-
-            // Build the text input to send to Dialogflow
-            val textInput = TextInput.newBuilder().setText(message).setLanguageCode("en-US").build()
-            val queryInput = QueryInput.newBuilder().setText(textInput).build()
-
-            // Get the response from Dialogflow
-            val response: DetectIntentResponse = sessionClient.detectIntent(session, queryInput)
-
-            return response.queryResult.fulfillmentText // Return the bot's reply
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return "Error: Could not connect to Dialogflow."
+        return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            val network = connectivityManager.activeNetwork ?: return false
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
+            networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        } else {
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
+            activeNetworkInfo != null && activeNetworkInfo.isConnected
         }
-    }*/
+    }
 
-    private fun sendToDialogflow(message: String): String {
-        // Run the Dialogflow request in a background thread to avoid UI blocking
-        var botResponse = "Sending..."
+    private fun sendToDialogflow(message: String, botReply: TextView) {
+        Log.d("DF_DEBUG", "Message: $message")
+        Log.d("DF_DEBUG", "Project ID: $projectID")
+        Log.d("DF_DEBUG", "Session ID: $sessionID")
 
         CoroutineScope(Dispatchers.IO).launch {
+            var botResponse = "Sending..."
+
             try {
-                // Load the service account key from res/raw
                 val credentials: InputStream = resources.openRawResource(R.raw.dialogflow_key)
                 val googleCredentials = GoogleCredentials.fromStream(credentials)
-                Log.d("Dialogflow", "Credentials loaded successfully!")
 
-                // Create credentials provider
                 val credentialsProvider = FixedCredentialsProvider.create(googleCredentials)
+                val transportChannelProvider = InstantiatingGrpcChannelProvider.newBuilder()
+                    .setEndpoint("dialogflow.googleapis.com:443")
+                    .build()
 
-                // Create a Dialogflow session with authenticated credentials
-                val sessionClient = SessionsClient.create(
-                    SessionsSettings.newBuilder()
-                        .setCredentialsProvider(credentialsProvider)
-                        .build()
-                )
+                val sessionsSettings = SessionsSettings.newBuilder()
+                    .setTransportChannelProvider(transportChannelProvider)
+                    .setCredentialsProvider(credentialsProvider)
+                    .build()
 
+                val sessionClient = SessionsClient.create(sessionsSettings)
                 val session = SessionName.of(projectID, sessionID)
 
-                // Build the text input to send to Dialogflow
-                val textInput = TextInput.newBuilder().setText(message).setLanguageCode("en-US").build()
+                val textInput = TextInput.newBuilder().setText(message).setLanguageCode("en").build()
                 val queryInput = QueryInput.newBuilder().setText(textInput).build()
 
-                // Get the response from Dialogflow
                 val response: DetectIntentResponse = sessionClient.detectIntent(session, queryInput)
+                Log.d("DF_DEBUG", "Dialogflow response: ${response.queryResult.fulfillmentText}")
 
-                botResponse = response.queryResult.fulfillmentText // Update the bot response with the reply
+                botResponse = response.queryResult.fulfillmentText
 
             } catch (e: Exception) {
-                e.printStackTrace()
-                botResponse = "Error: Could not connect to Dialogflow."
+                Log.e("DialogflowError", "Failed to connect", e)
+                botResponse = "Error: ${e.localizedMessage}"
             }
 
-            // Update the UI with the result (back on the main thread)
             withContext(Dispatchers.Main) {
-                val botReply = findViewById<TextView>(R.id.botReply)
                 botReply.text = botResponse
             }
         }
-
-        return botResponse // Initially return a "Sending..." message
     }
 }

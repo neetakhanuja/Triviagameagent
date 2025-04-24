@@ -38,30 +38,23 @@ android {
     }
 }
 
-dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
-    // Dialogflow SDK for Android and for connecting with google
     dependencies {
-        // Dialogflow SDK
-        implementation("com.google.cloud:google-cloud-dialogflow:4.4.0")
+        // AndroidX libraries
+        implementation(libs.androidx.core.ktx)
+        implementation(libs.androidx.appcompat)
+        implementation(libs.material)
+        testImplementation(libs.junit)
+        androidTestImplementation(libs.androidx.junit)
+        androidTestImplementation(libs.androidx.espresso.core)
 
+        // Dialogflow SDK and gRPC dependencies
+        implementation("com.google.cloud:google-cloud-dialogflow:4.4.0")
         implementation("io.grpc:grpc-okhttp:1.40.0")
         implementation("io.grpc:grpc-protobuf:1.40.0")
         implementation("io.grpc:grpc-stub:1.40.0")
 
-
-        // Google Auth Library for authentication
+        // Google Auth Library for Dialogflow authentication
         implementation("com.google.auth:google-auth-library-oauth2-http:0.27.0")
     }
-
-}}
-dependencies {
-    implementation(libs.support.annotations)
 }
+

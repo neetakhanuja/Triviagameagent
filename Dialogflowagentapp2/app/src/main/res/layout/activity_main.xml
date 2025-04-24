@@ -23,9 +23,27 @@
 
     <TextView
         android:id="@+id/botReply"
-        android:text="Bot reply will appear here..."
-        android:textSize="18sp"
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bot response will appear here"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/googleLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Click here to visit Google"
+        android:textColor="@android:color/holo_blue_light"
+        android:textSize="16sp"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/connectivityStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Checking Connectivity..."
+        android:textSize="16sp"
+        android:layout_marginTop="16dp" />
+
 </LinearLayout>
