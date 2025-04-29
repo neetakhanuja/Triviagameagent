@@ -1,56 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:paddingLeft="60dp"
-    android:fitsSystemWindows="true"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="#FFFFFF">
 
-    <EditText
-        android:id="@+id/userInput"
-        android:hint="Type your message"
-        android:layout_marginTop="100dp"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/sendButton"
-        android:text="Send"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" />
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="24dp"
+        android:layout_marginTop="24dp"> <!-- Brings content lower -->
 
-    <TextView
-        android:id="@+id/botReply"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Bot response will appear here"
-        android:textSize="18sp" />
+        <!-- Input Box -->
+        <EditText
+            android:id="@+id/userInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type your message"
+            android:textSize="18sp"
+            android:padding="12dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginTop="32dp" />
 
-    <TextView
-        android:id="@+id/googleLink"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Click here to visit Google"
-        android:textColor="@android:color/holo_blue_light"
-        android:textSize="16sp"
-        android:clickable="true"
-        android:focusable="true" />
+        <!-- Send Button -->
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SEND"
+            android:textAllCaps="true"
+            android:textSize="18sp"
+            android:layout_marginTop="16dp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#8000FF" />
 
-    <TextView
-        android:id="@+id/connectivityStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Checking Connectivity..."
-        android:textSize="16sp"
-        android:layout_marginTop="16dp" />
+        <!-- Bot Reply -->
+        <TextView
+            android:id="@+id/botReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bot response will appear here"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="96dp" /> <!-- Extra space here -->
 
-    <Button
-        android:id="@+id/micButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🎤 Speak" />
+        <!-- Mic Button -->
+        <ImageButton
+            android:id="@+id/micButton"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"
+            android:background="@drawable/round_button"
+            android:src="@drawable/ic_mic"
+            android:contentDescription="Microphone button"
+            android:scaleType="fitCenter"
+            android:tint="#FFFFFF"
+            android:padding="24dp" />
 
-</LinearLayout>
+        <!-- Connectivity Info -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="32dp">
+
+            <TextView
+                android:id="@+id/connectivityStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Internet: Connected"
+                android:textColor="#424242"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/googleLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Click here to visit Google"
+                android:textColor="#1E88E5"
+                android:textSize="16sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

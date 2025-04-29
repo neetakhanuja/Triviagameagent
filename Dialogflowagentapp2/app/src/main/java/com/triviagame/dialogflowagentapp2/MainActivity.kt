@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.InputStream
 import android.speech.tts.TextToSpeech
+import android.widget.ImageButton
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
@@ -71,7 +72,9 @@ class MainActivity : AppCompatActivity() {
         val botReply = findViewById<TextView>(R.id.botReply)
         val connectivityStatus = findViewById<TextView>(R.id.connectivityStatus)
 
-        val micButton = findViewById<Button>(R.id.micButton)
+    //  val micButton = findViewById<Button>(R.id.micButton)
+        val micButton = findViewById<ImageButton>(R.id.micButton)
+
 
         sendButton.setOnClickListener {
             val message = userInput.text.toString()
